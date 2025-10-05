@@ -1,0 +1,19 @@
+.start {
+  background-color: #4caf50;
+  color: white;
+}
+
+.pause {
+  background-color: #f44336;
+  color: white;
+}
+
+.lap {
+  background-color: #e91e63;
+  color: white;
+}
+
+.resume {
+  background-color: #ffeb3b;
+  color: black;
+}

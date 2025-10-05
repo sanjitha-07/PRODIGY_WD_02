@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stylish Stopwatch</title>
+  <style>
+    /* Centering the page */
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+    }
+
+    /* Stopwatch container */
+    .stopwatch-container {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      width: 350px;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      font-size: 28px;
+    }
+
+    /* Time display */
+    #time {
+      font-size: 50px;
+      font-weight: bold;
+      margin-bottom: 30px;
+      letter-spacing: 2px;
+    }
+
+    /* Button container */
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .buttons button {
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: bold;
+    }
+
+    .start { background-color: #4CAF50; color: white; }
+    .pause { background-color: #f44336; color: white; }
+    .resume { background-color: #ffeb3b; color: black; }
+    .lap { background-color: #e91e63; color: white; }
+    .reset { background-color: #9e9e9e; color: white; }
+
+    .buttons button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Lap section */
+    .laps {
+      max-height: 150px;
+      overflow-y: auto;
+      margin-top: 10px;
+      padding-right: 5px;
+    }
+
+    .laps div {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 16px;
+      text-align: left;
+    }
+
+    /* Custom scrollbar */
+    .laps::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .laps::-webkit-scrollbar-thumb {
+      background-color: rgba(255, 255, 255, 0.4);
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="stopwatch-container">
+    <h1>Stopwatch</h1>
+    <div id="time">00:00:00</div>
+
+    <div class="buttons">
+      <button class="start" onclick="startStopwatch()">Start</button>
+      <button class="pause" onclick="pauseStopwatch()">Stop</button>
+      <button class="resume" onclick="resumeStopwatch()">Resume</button>
+      <button class="lap" onclick="recordLap()">Lap</button>
+      <button class="reset" onclick="resetStopwatch()">Reset</button>
+    </div>
+
+    <div class="laps" id="laps"></div>
+  </div>
+
+  <script>
+    let hours = 0, minutes = 0, seconds = 0;
+    let interval;
+    let running = false;
+
+    function updateTime() {
+      seconds++;
+      if (seconds === 60) {
+        seconds = 0;
+        minutes++;
+      }
+      if (minutes === 60) {
+        minutes = 0;
+        hours++;
+      }
+
+      document.getElementById('time').textContent =
+        `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    function startStopwatch() {
+      if (!running) {
+        interval = setInterval(updateTime, 1000);
+        running = true;
+      }
+    }
+
+    function pauseStopwatch() {
+      clearInterval(interval);
+      running = false;
+    }
+
+    function resumeStopwatch() {
+      if (!running) {
+        interval = setInterval(updateTime, 1000);
+        running = true;
+      }
+    }
+
+    function resetStopwatch() {
+      clearInterval(interval);
+      running = false;
+      hours = 0;
+      minutes = 0;
+      seconds = 0;
+      document.getElementById('time').textContent = '00:00:00';
+      document.getElementById('laps').innerHTML = '';
+    }
+
+    function recordLap() {
+      if (running) {
+        const lapTime = document.getElementById('time').textContent;
+        const lapDiv = document.createElement('div');
+        lapDiv.textContent = `Lap: ${lapTime}`;
+        document.getElementById('laps').prepend(lapDiv);
+      }
+    }
+  </script>
+
+</body>
+</html>
